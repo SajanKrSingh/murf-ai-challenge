@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 3dfcbe2d14c39567aeba7b82e530d0360ae1f422 SajanKumarSingh <kumarsajan0013@gmail.com> 1754118120 +0530	commit (initial): Initialize Flask app and add basic HTML and JavaScript files for project setup--- Day 1
+3dfcbe2d14c39567aeba7b82e530d0360ae1f422 daa26630c7340054844491ee4de537ce43eaaf7b SajanKumarSingh <kumarsajan0013@gmail.com> 1754232971 +0530	commit: Implement Day 2: Professional Text-to-Speech Web App with FastAPI and Murf AI integration
+daa26630c7340054844491ee4de537ce43eaaf7b 892497a7a540e4df688b517526dd037530444fc7 SajanKumarSingh <kumarsajan0013@gmail.com> 1754291564 +0530	commit: Day 03
+892497a7a540e4df688b517526dd037530444fc7 3f01399d3d86e21f79b215b6fad96d25e0984d5e SajanKumarSingh <kumarsajan0013@gmail.com> 1754379897 +0530	commit: feat: Enhance Day 04 Voice Agent with TTS and Echo Bot features
+3f01399d3d86e21f79b215b6fad96d25e0984d5e 7fdb6770bfdb0626aaf137fada1c16c4e6c0e4cf SajanKumarSingh <kumarsajan0013@gmail.com> 1754464330 +0530	commit: Day 05
