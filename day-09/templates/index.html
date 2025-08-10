@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Voice Agent</title>
+    <script src="/static/script.js?v=1" defer></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <!-- This line loads the Tailwind CSS framework -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style type="text/tailwindcss">
+        :root {
+            /* Updated color variables to match the purple/blue theme */
+            --bg-gradient: linear-gradient(135deg, #1F1C2C 0%, #3a3356 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-primary: #f0f0f0;
+            --text-secondary: #bdc3c7;
+            --primary-color: #8E44AD; /* Purple */
+            --secondary-color: #3498DB; /* Blue */
+            --accent-neon-blue: #3498DB;
+            --accent-neon-purple: #9b59b6;
+        }
+        body {
+            /* Updated font and background */
+            font-family: "Poppins", sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+        }
+        .main_container {
+            @apply max-w-4xl mx-auto p-6;
+        }
+        .glass_container {
+            /* Updated glass effect */
+            @apply bg-[var(--glass)] backdrop-blur-xl rounded-2xl p-8 border border-white/10 shadow-2xl shadow-purple-500/20;
+        }
+        .typography_h1 {
+            /* Updated title gradient */
+            @apply text-5xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-[var(--accent-neon-blue)] to-[var(--accent-neon-purple)];
+        }
+        .typography_h2 {
+            @apply text-2xl font-semibold mb-4 text-[var(--text-primary)];
+        }
+        .input, .select {
+            /* Updated input/select styles */
+            @apply bg-black/30 border border-white/20 rounded-lg p-4 w-full focus:outline-none focus:ring-2 focus:ring-[var(--accent-neon-purple)] focus:border-transparent transition-all duration-300 placeholder:text-[var(--text-secondary)];
+        }
+        .input {
+            min-height: 120px;
+            resize: none;
+        }
+        .button_primary {
+            /* Updated primary button style */
+            @apply bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] hover:from-[var(--secondary-color)] hover:to-[var(--primary-color)] text-white font-bold py-3 px-8 rounded-lg focus:outline-none transition-all duration-300 shadow-[0_0_15px] shadow-purple-500/50 hover:shadow-[0_0_25px] hover:shadow-blue-500/70;
+        }
+        .button_secondary {
+            /* Updated secondary button style */
+            @apply bg-white/10 hover:bg-white/20 text-[var(--text-primary)] font-bold py-3 px-6 rounded-lg focus:outline-none transition-all duration-300;
+        }
+        .transcribed_text {
+            @apply mt-6 p-4 bg-black/30 rounded-lg min-h-[80px] text-[var(--text-secondary)] italic;
+        }
+        .voice_visualizer {
+            @apply w-full h-24 bg-black/30 rounded-lg flex items-center justify-center border border-white/10 mb-6;
+        }
+    </style>
+</head>
+
+<body class="bg-[var(--bg-gradient)]">
+    <div class="relative flex size-full min-h-screen flex-col items-center justify-center overflow-x-hidden p-4">
+        <div class="main_container w-full">
+            <div class="glass_container">
+                <h1 class="typography_h1">AI Voice Agent</h1>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Text-to-Speech Section -->
+                    <div class="flex flex-col space-y-6">
+                        <h2 class="typography_h2">Text-to-Speech</h2>
+                        <textarea id="text-input" class="input"
+                            placeholder="Enter text to convert to speech"></textarea>
+                        <select id="tts-voice-select" class="select">
+                            <option>Loading voices...</option>
+                        </select>
+                        <div class="text-center">
+                            <button id="generate-button" class="button_primary">Generate Audio</button>
+                        </div>
+                        <div id="audio-container"></div>
+                    </div>
+                    <!-- Voice Interaction Section -->
+                    <div class="flex flex-col space-y-6">
+                        <h2 class="typography_h2">Voice Conversation</h2>
+                        <div class="voice_visualizer">
+                            <canvas id="visualizer" class="w-full h-full"></canvas>
+                        </div>
+                        <select id="echo-voice-select" class="select">
+                            <option>Loading voices...</option>
+                        </select>
+                        <div class="flex items-center justify-center gap-4">
+                            <button id="start-recording" class="button_primary w-full">Start Recording</button>
+                            <button id="stop-recording" class="button_secondary w-full" disabled>Stop Recording</button>
+                        </div>
+                        <div>
+                            <p class="text-[var(--text-primary)] mb-2 font-semibold">You said:</p>
+                            <div id="transcription-container" class="transcribed_text">
+                                Your transcribed text will appear here...
+                            </div>
+                        </div>
+                        <div id="echo-audio-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
