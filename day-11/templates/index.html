@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 11: AI Voice Assistant</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --secondary-bg: #f7faff;
+            --widget-bg: #ffffff;
+            --user-bubble-bg: #dcf8c6;
+            --agent-bubble-bg: #ffffff;
+            --text-dark: #333;
+            --text-light: #555;
+            --border-color: #e9e9e9;
+            --success-color: #4CAF50;
+            --danger-color: #f44336;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--secondary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .chat-widget-container {
+            width: 100%;
+            max-width: 800px;
+            height: 70vh;
+            max-height: 700px;
+            background: var(--widget-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 18px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .chat-header p {
+            margin: 4px 0 0 0;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .chat-history {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            padding-right: 10px;
+            /* For scrollbar */
+        }
+
+        .chat-history p {
+            margin: 0;
+            padding: 10px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .user-message {
+            background-color: var(--user-bubble-bg);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .agent-message {
+            background-color: var(--agent-bubble-bg);
+            border: 1px solid var(--border-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .agent-message strong,
+        .user-message strong {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 0.8rem;
+        }
+
+        .controls-footer {
+            padding: 20px;
+            background: #f9f9f9;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #startBtn {
+            background: var(--success-color);
+            color: white;
+        }
+
+        #stopBtn {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .status-area {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            min-height: 20px;
+        }
+
+        .recording-indicator {
+            font-weight: 500;
+            color: var(--danger-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-widget-container">
+        <div class="chat-header">
+            <h3>MY ASSISTANT AI - Day 11</h3>
+            <p>Session ID: <span id="sessionId"></span></p>
+        </div>
+
+        <div class="chat-body">
+            <div id="chatHistory" class="chat-history">
+                <p class="agent-message"><strong>AI:</strong> Hi there! I'm ready to chat. Click the 'Start Recording'
+                    button to begin.</p>
+            </div>
+        </div>
+
+        <div class="controls-footer">
+            <div id="statusDisplay" class="status-area">Click Start Recording to begin.</div>
+            <div class="recording-indicator" id="recordingIndicator" hidden>Recording...</div>
+            <audio id="audioPlayer" controls hidden></audio>
+            <div class="button-group">
+                <button id="startBtn">Start Recording</button>
+                <button id="stopBtn" disabled>Stop Recording</button>
+            </div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
