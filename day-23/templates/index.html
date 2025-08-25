@@ -1,121 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Voice Agent</title>
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for a nice font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Custom styles for the app */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DAY 23</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        /* Custom animation for the recording button */
-        .record-btn.recording {
-            animation: pulse 2s infinite;
-        }
+    :root {
+      --primary-color: #6a11cb;
+      --primary-gradient: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+      --secondary-color: #e9f0f8;
+      --user-bubble-bg: #e2e8f0;
+      --agent-bubble-bg: #fff;
+      --text-color: #333;
+      --shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      --border-color: #e0e0e0;
+      --record-btn-color: #f44336;
+    }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
-            }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text-color);
+    }
 
-            70% {
-                transform: scale(1.05);
-                box-shadow: 0 0 0 25px rgba(220, 53, 69, 0);
-            }
+    .chat-widget-container {
+      width: 100%;
+      max-width: 500px;
+      height: 80vh;
+      max-height: 800px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-            }
-        }
+    .chat-header {
+      background: var(--primary-color);
+      background: var(--primary-gradient);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-        /* Custom scrollbar for chat log */
-        #chat-log::-webkit-scrollbar {
-            width: 8px;
-        }
+    .chat-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
 
-        #chat-log::-webkit-scrollbar-track {
-            background: #1a202c;
-        }
+    .chat-header p {
+      font-size: 0.8rem;
+      color: #dbeafe;
+      margin-top: 5px;
+    }
 
-        /* gray-900 */
-        #chat-log::-webkit-scrollbar-thumb {
-            background: #4a5568;
-            border-radius: 4px;
-        }
+    #chat-log {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-        /* gray-600 */
+    .message {
+      margin: 0;
+      padding: 12px 18px;
+      border-radius: 20px;
+      max-width: 80%;
+      word-wrap: break-word;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
 
-        /* Styles for dynamically created chat messages */
-        .message {
-            padding: 0.75rem 1rem;
-            border-radius: 1rem;
-            margin-bottom: 0.75rem;
-            max-width: 80%;
-            line-height: 1.5;
-        }
+    .user {
+      background-color: var(--user-bubble-bg);
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
 
-        .user {
-            background-color: #2563eb;
-            /* blue-600 */
-            color: white;
-            border-bottom-right-radius: 0.25rem;
-            align-self: flex-end;
-        }
+    .assistant {
+      background-color: var(--agent-bubble-bg);
+      border: 1px solid var(--border-color);
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
 
-        .assistant {
-            background-color: #4a5568;
-            /* gray-600 */
-            color: white;
-            border-bottom-left-radius: 0.25rem;
-            align-self: flex-start;
-        }
-    </style>
+    .controls-container {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background: var(--secondary-color);
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      align-items: center;
+    }
+
+    #recordBtn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      background-color: var(--record-btn-color);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #recordBtn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    #recordBtn.recording {
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 15px rgba(244, 67, 54, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+      }
+    }
+
+    #statusDisplay {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: var(--text-color);
+      min-height: 20px;
+    }
+  </style>
 </head>
 
-<body class="bg-gray-900 text-white antialiased">
-    <div class="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <!-- Main Chat Container -->
-        <div class="w-full max-w-2xl h-[80vh] flex flex-col bg-gray-800 rounded-2xl shadow-2xl p-6">
-            <!-- Header -->
-            <div class="text-center border-b border-gray-700 pb-4 mb-4">
-                <h4 class="text-2xl font-bold text-white">AI Voice Agent</h4>
-                <p class="text-gray-400 text-sm">Your Conversational AI Assistant</p>
-            </div>
-
-            <!-- Chat Log -->
-            <div id="chat-log" class="flex-grow flex flex-col space-y-2 overflow-y-auto pr-2">
-                <!-- Chat messages will be appended here -->
-            </div>
-
-            <!-- Input Area -->
-            <div class="chat-input-container text-center pt-4 mt-4 border-t border-gray-700">
-                <button id="recordBtn"
-                    class="record-btn w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center transition-all duration-300 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
-                        class="bi bi-mic-fill" viewBox="0 0 16 16">
-                        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
-                        <path
-                            d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-                    </svg>
-                </button>
-                <div id="statusDisplay" class="status-display text-gray-400 h-6 mt-3 transition-all duration-300">Ready
-                    to chat!</div>
-            </div>
-        </div>
+<body>
+  <div class="chat-widget-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <h3>DAY 23</h3>
+      <p>Your Conversational AI Assistant</p>
     </div>
-    <audio id="audioPlayer" hidden></audio>
-    <script src="/static/script.js"></script>
-</body>
 
+    <!-- Chat Log -->
+    <div id="chat-log">
+      <p class="assistant message">Hi there! I'm ready to chat. Click the microphone to begin.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-container">
+      <audio id="audioPlayer" hidden></audio>
+      <button id="recordBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+          class="bi bi-mic-fill" viewBox="0 0 16 16">
+          <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0z" />
+          <path
+            d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3.5 8V7a.5.5 0 0 1 .5-.5" />
+        </svg>
+      </button>
+      <div id="statusDisplay">Click the microphone to begin.</div>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
 </html>
