@@ -54,6 +54,7 @@ async def websocket_endpoint(websocket: WebSocket):
         await websocket.send_json({"type": "final", "text": text})
         try:
             if ("search for" in text.lower() or "what is" in text.lower()) and SERPAPI_API_KEY:
+                # Pass all required keys to the web response function
                 full_response, updated_history = llm.get_web_response(text, chat_history, GEMINI_API_KEY, SERPAPI_API_KEY)
             else:
                 full_response, updated_history = llm.get_llm_response(text, chat_history, GEMINI_API_KEY)
@@ -78,9 +79,6 @@ async def websocket_endpoint(websocket: WebSocket):
         logging.info(f"Final transcript received: {text}")
         asyncio.run_coroutine_threadsafe(handle_transcript(text), loop)
 
-    # --- THIS IS THE FIX ---
-    # We set the API key in the imported config module before creating the transcriber.
-    # The original stt.py will now read this new value.
     app_config.ASSEMBLYAI_API_KEY = ASSEMBLYAI_API_KEY
     
     transcriber = stt.AssemblyAIStreamingTranscriber(
