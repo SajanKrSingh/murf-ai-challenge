@@ -1,0 +1,21 @@
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv
+venv/
+env/
+
+# IDE and editor files
+.idea/
+.vscode/
+
+# Environment variables file
+.env
+
+# Temporary files
+*.tmp
+*.swp
